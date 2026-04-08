@@ -656,6 +656,7 @@ static void OpPrestamo(CLIENT *clnt)
     TPosicion tpos;
     int      *res;
     int       pos;
+    int mostrados;
 
     printf("\n Introduce el texto a Buscar: ");
     __fpurge(stdin);
@@ -667,8 +668,13 @@ static void OpPrestamo(CLIENT *clnt)
     scanf("%c", &campo);
 
     printf("\n");
-    BuscarYMostrar(clnt, ida, texto, campo);
-
+    mostrados = BuscarYMostrar(clnt, ida, texto, campo);
+    if(mostrados==0)
+    {
+        printf("\n ***No se encoontraron libros para prestar.***\n");
+        Pause;
+        return;
+    }
     printf("\n ¿ Quieres sacar algún libro de la biblioteca (s/n) ? ");
     __fpurge(stdin);
     scanf("%c", &resp);
@@ -704,14 +710,20 @@ static void OpDevolucion(CLIENT *clnt)
     TPosicion tpos;
     int      *res;
     int       pos;
+    int mostrados;
 
     printf("\n Introduce el Isbn a Buscar: ");
     __fpurge(stdin);
     scanf("%s", texto);
 
     printf("\n");
-    BuscarYMostrar(clnt, ida, texto, 'i'); /* búsqueda siempre por Isbn */
-
+    mostrados = BuscarYMostrar(clnt, ida, texto, 'i'); /* búsqueda siempre por Isbn */
+    if(mostrados==0)
+    {
+        printf("\n *** No se encoontraron libros para devolver.***\n");
+        Pause;
+        return;
+    }
     printf("\n ¿ Quieres devolver algún libro de la biblioteca (s/n) ? ");
     __fpurge(stdin);
     scanf("%c", &resp);

@@ -184,7 +184,12 @@ int * cargardatos_1_svc(TFichero *argp, struct svc_req *rqstp)
 bool_t *guardardatos_1_svc(int *argp, struct svc_req *rqstp)
 {
 	static bool_t  result;
-	if(*argp!=IdAdmin || IdAdmin==-1)
+	if(!IdaValido(*argp))
+	{
+		result=FALSE;
+		return &result;
+	}
+	if(strlen(NomFichero)==0)
 	{
 		result=FALSE;
 		return &result;
@@ -386,7 +391,7 @@ int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp)
 bool_t *ordenar_1_svc(TOrdenacion *argp, struct svc_req *rqstp)
 {
 	static bool_t  result;
-	if(!IdaValido(argp->Ida))
+	if(!IdaValido(argp->Ida) || NumLibros==0)
 	{
 		result=FALSE;
 		return &result;
