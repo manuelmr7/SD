@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <locale.h>
 
 //VARIABLES GLOBALES
 TLibro *Biblioteca=NULL; //Vector dinámico de libros
@@ -82,17 +83,17 @@ bool_t EsMenor(int P1, int P2, int Campo)
 	
 	switch(Campo)
 	{
-		case 0: salida=strcmp(L1.Isbn,L2.Isbn)<0?TRUE:FALSE;
+		case 0: salida=/*strcoll*/strcmp(L1.Isbn,L2.Isbn)<0?TRUE:FALSE;
 				break; 
-		case 1: salida=strcmp(L1.Titulo,L2.Titulo)<0?TRUE:FALSE;
+		case 1: salida=/*strcoll*/strcmp(L1.Titulo,L2.Titulo)<0?TRUE:FALSE;
 				break; 
-		case 2: salida=strcmp(L1.Autor,L2.Autor)<0?TRUE:FALSE;
+		case 2: salida=/*strcoll*/strcmp(L1.Autor,L2.Autor)<0?TRUE:FALSE;
 				break; 
 		case 3: salida=L1.Anio<L2.Anio?TRUE:FALSE;
 				break; 
-		case 4: salida=strcmp(L1.Pais,L2.Pais)<0?TRUE:FALSE;
+		case 4: salida=/*strcoll*/strcmp(L1.Pais,L2.Pais)<0?TRUE:FALSE;
 				break; 
-		case 5: salida=strcmp(L1.Idioma,L2.Idioma)<0?TRUE:FALSE;
+		case 5: salida=/*strcoll*/strcmp(L1.Idioma,L2.Idioma)<0?TRUE:FALSE;
 				break; 
 		case 6: salida=L1.NoLibros<L2.NoLibros?TRUE:FALSE;
 				break; 
@@ -104,7 +105,9 @@ bool_t EsMenor(int P1, int P2, int Campo)
 	return salida;
 }
 void OrdenarVector() {
-    if (NumLibros <= 1) return;
+    if (NumLibros <= 1)
+		return;
+	setlocale(LC_COLLATE, ""); 
     
     // Método de la burbuja usando EsMenor del profesor
     for (int i = 0; i < NumLibros - 1; i++) {
