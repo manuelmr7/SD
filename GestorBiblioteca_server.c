@@ -36,15 +36,15 @@ int * conexion_1_svc(char *argp, struct svc_req *rqstp)
 {
 	static int  result;
 	//Verificamos si hay un admin
-	if(IdAdmin==-1)
+	if(IdAdmin!=-1)
 	{
 		result=-1;
-		//return &result;
+		return &result;
 	}
 	if(strcmp(argp,"563498")!=0)
 	{
 		result=-2;
-		//return &result;
+		return &result;
 	}
 	//Genero ID aleatorio y lo guardo.
 	srand(time(NULL));
@@ -305,7 +305,7 @@ int *comprar_1_svc(TComRet *argp, struct svc_req *rqstp)
 	while(Biblioteca[pos].NoListaEspera > 0 && Biblioteca[pos].NoLibros>0)
 	{
 		Biblioteca[pos].NoListaEspera--;
-		Biblioteca[pos].NoPrestados--;
+		Biblioteca[pos].NoPrestados++;
 		Biblioteca[pos].NoLibros--;
 	}
 	OrdenarVector();
@@ -376,46 +376,8 @@ int *retirar_1_svc(TComRet *argp, struct svc_req *rqstp)
 	}
 	Biblioteca[pos].NoLibros-=argp->NoLibros;
 	OrdenarVector();
-	/*int i=0;
-	int encontrado=0;
-	int pos=-1;
-	if(IdAdmin==-1 || argp->Ida!=IdAdmin)
-	{
-		result=-1;
-	}
-	else
-	{
-		while(i<NumLibros && encontrado==0)
-		{
-			if(strcmp(Biblioteca[i].Isbn,argp->Isbn)==0)
-			{
-				encontrado=1;
-				pos=i;
-			}
-			else{
-				i++;
-			}
-		}
-		if(encontrado=0)
-		{
-			result=0;
-		}
-		else
-		{
-			if(Biblioteca[pos].NoLibros < argp->NoLibros)
-			{
-				result=2;
-			}
-			else
-			{
-				Biblioteca[pos].NoLibros -= argp->NoLibros;
-				OrdenarVector();
-				result=1;
-			}
-		}
-	}
-
-	return &result;*/
+	result=1;
+	return &result;
 }
 
 bool_t *ordenar_1_svc(TOrdenacion *argp, struct svc_req *rqstp)
@@ -455,7 +417,7 @@ int *buscar_1_svc(TConsulta *argp, struct svc_req *rqstp)
 	static int  result;
 	if(!IdaValido(argp->Ida))
 	{
-		result=2;
+		result=-2;
 		return &result;
 	}
 	result=BuscarPorIsbn(argp->Isbn);
@@ -587,7 +549,7 @@ int *devolver_1_svc(TPosicion *argp, struct svc_req *rqstp)
 	TLibro *L;
 	if(argp->Pos<0 || argp->Pos>=NumLibros)
 	{
-		result=1;
+		result=-1;
 		return &result;
 	}
 	L=&Biblioteca[argp->Pos];
